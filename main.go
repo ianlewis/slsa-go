@@ -26,7 +26,7 @@ import (
 )
 
 func usage(p string) {
-	panic(fmt.Sprintf(`Usage: 
+	panic(fmt.Sprintf(`Usage:
 	 %s build [--dry] slsa-releaser.yml
 	 %s provenance --binary-name $NAME --digest $DIGEST --command $COMMAND --env $ENV`, p, p))
 }

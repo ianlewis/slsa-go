@@ -1,5 +1,5 @@
 # Copyright The GOSST team.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -151,7 +151,7 @@ jobs:
           # Compare hashes. Explicit exit to be safe.
           # TODO: remove the builder as well.
           echo "$BUILDER_HASH $BUILDER_BINARY" | sha256sum --strict --check --status || exit -2
-    
+
           # Make the builder executable.
           chmod a+x "$BUILDER_BINARY"
 
@@ -227,7 +227,7 @@ jobs:
           # Compare hashes. Explicit exit to be safe.
           # TODO: remove the builder as well.
           echo "$BUILDER_HASH $BUILDER_BINARY" | sha256sum --strict --check --status || exit -2
-    
+
           # Make the builder executable.
           chmod a+x "$BUILDER_BINARY"
 
@@ -300,13 +300,13 @@ jobs:
         with:
           name: "${{ env.GENERATED_BINARY_NAME }}"
 
-      - name: Verify binary hash 
+      - name: Verify binary hash
         env:
           UNTRUSTED_BINARY_HASH: "${{ needs.build.outputs.go-binary-sha256 }}"
           UNTRUSTED_BINARY_NAME: "${{ needs.build-dry.outputs.go-binary-name }}"
         run: |
           set -euo pipefail
-      
+
           echo "hash of binary ${{ env.GENERATED_BINARY_NAME }} should be $UNTRUSTED_BINARY_HASH"
 
           COMPUTED_HASH=$(sha256sum "${{ env.GENERATED_BINARY_NAME }}" | awk '{print $1}')
@@ -356,7 +356,7 @@ jobs:
           # Compare hashes. Explicit exit to be safe.
           # TODO: remove the builder as well.
           echo "$BUILDER_HASH $BUILDER_BINARY" | sha256sum --strict --check --status || exit -2
-    
+
           # Make the builder executable.
           chmod a+x "$BUILDER_BINARY"
 
