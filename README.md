@@ -225,21 +225,17 @@ To verify the provenance, use the [github.com/gossts/slsa-provenance](github.com
 $ git clone git@github.com:gossts/slsa-provenance.git
 $ go run . --help
     -binary string
-    	path to a binary to verify
+          path to a binary to verify
     -provenance string
-    	path to a provenance file
+          path to a provenance file
     -source string
-        expected source repository that should have produced the binary, e.g. github.com/org/example
-    -tag string
-       expected tag or version the build was generated for
-    -branch
-      expected branch the build was generated from
+          expected source repository that should have produced the binary, e.g. github.com/org/example
 ```
 
 ### Command line examples
 
 ```shell
-$ go run . --binary ~/Downloads/binary-linux-amd64 --provenance ~/Downloads/binary-linux-amd64.intoto.jsonl --source github.com/origin/repo --branch "refs/heads/main" --tag "refs/tags/v1.2"
+$ go run . --binary ~/Downloads/binary-linux-amd64 --provenance ~/Downloads/binary-linux-amd64.intoto.jsonl --source github.com/origin/repo
 
 Verified against tlog entry 1544571
 verified SLSA provenance produced at
