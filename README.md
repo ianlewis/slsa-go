@@ -1,29 +1,38 @@
 # Generation of SLSA3+ provenance for Go binaries
+
 This repository contains a reference implementation for generating non-forgeable [SLSA provenance](https://slsa.dev/) that meets the requirement for the [SLSA level 3 and above](https://slsa.dev/spec/v0.1/levels) for projects using the Go programming language.
 
 This repository contains the code, examples and technical design for our blog post on [Non forgeable SLSA provenance using GitHub workflows](TODO).
 
-________
+---
+
 [Generation of provenance](#generation)
+
 - [Example provenance](#example-provenance)
 - [Configuration file](#configuration-file)
 - [Workflow inputs](#workflow-inputs)
 - [Workflow Example](#workflow-example)
 
 [Verification of provenance](#verification)
+
 - [Inputs](#inputs)
 - [Command line examples](#command-line-example)
 
 [Technical design](#technial-design)
+
 - [Blog posts](#blog-posts)
 - [Specifications](#specifications)
-________
+
+---
 
 ## Generation
+
 To generate provenance for a golang binary, follow the steps below:
 
 ### Example provenance
+
 An example of the provenance generated from this repo is below:
+
 ```json
 {
   "_type": "https://in-toto.io/Statement/v0.1",
@@ -120,29 +129,30 @@ flags:
   - -trimpath
   - -tags=netgo
 
-goos: linux     # same values as GOOS env variable. 
-goarch: amd64   # same values as GOARCH env variable. 
+goos: linux # same values as GOOS env variable.
+goarch: amd64 # same values as GOARCH env variable.
 
 # Binary name.
 # {{ .OS }} will be replaced by goos field in the config file.
 # {{ .Arch }} will be replaced by goarch field in the config file.
 binary: binary-{{ .OS }}-{{ .Arch }}
 
-# (Optional) ldflags generated dynamically in the workflow, and set as the `env` input variables in the workflow. 
+# (Optional) ldflags generated dynamically in the workflow, and set as the `env` input variables in the workflow.
 ldflags:
-  - '{{ .Env.VERSION_LDFLAGS }}'
+  - "{{ .Env.VERSION_LDFLAGS }}"
 ```
 
 ### Workflow inputs
 
 The builder workflow [gossts/slsa-go/.github/workflows/builder.yml](.github/workflows/builder.yml) accepts the following inputs:
 
-| Name | Required | Description |
-| ------------ | -------- | ----------- |
-| `go-version` | no | The go version for your project. This value is passed, unchanged, to the [actions/setup-go](https://github.com/actions/setup-go) action when setting up the environment |
-| `env` | no | A list of environment variables, seperated by `,`: `VAR1: value, VAR2: value`. This is typically used to pass dynamically-generated values, such as `ldflags`. Note that only environment variables with names starting with `CGO_` or `GO` are accepted.|
+| Name         | Required | Description                                                                                                                                                                                                                                               |
+| ------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `go-version` | no       | The go version for your project. This value is passed, unchanged, to the [actions/setup-go](https://github.com/actions/setup-go) action when setting up the environment                                                                                   |
+| `env`        | no       | A list of environment variables, seperated by `,`: `VAR1: value, VAR2: value`. This is typically used to pass dynamically-generated values, such as `ldflags`. Note that only environment variables with names starting with `CGO_` or `GO` are accepted. |
 
 ### Workflow Example
+
 Create a new workflow, say `.github/workflows/slsa-goreleaser.yml`:
 
 ```yaml
@@ -151,10 +161,10 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - "*" 
+      - "*"
 
 permissions: read-all
-      
+
 jobs:
   # Generate ldflags dynamically.
   # Optional: only needed for ldflags.
@@ -206,9 +216,11 @@ jobs:
 ```
 
 ## Verification of provenance
-To verify the provenance, use the [github.com/gossts/slsa-provenance](github.com/gossts/slsa-provenance) project. 
+
+To verify the provenance, use the [github.com/gossts/slsa-provenance](github.com/gossts/slsa-provenance) project.
 
 ### Inputs
+
 ```shell
 $ git clone git@github.com:gossts/slsa-provenance.git
 $ go run . --help
@@ -221,15 +233,16 @@ $ go run . --help
     -tag string
        expected tag or version the build was generated for
     -branch
-      expected branch the build was generated from       
+      expected branch the build was generated from
 ```
 
 ### Command line examples
+
 ```shell
 $ go run . --binary ~/Downloads/binary-linux-amd64 --provenance ~/Downloads/binary-linux-amd64.intoto.jsonl --source github.com/origin/repo --branch "refs/heads/main" --tag "refs/tags/v1.2"
 
 Verified against tlog entry 1544571
-verified SLSA provenance produced at 
+verified SLSA provenance produced at
  {
         "caller": "origin/repo",
         "commit": "0dfcd24824432c4ce587f79c918eef8fc2c44d7b",
@@ -243,7 +256,9 @@ successfully verified SLSA provenance
 ## Technical design
 
 ### Blog post
+
 Find our blog post series [here](TODO).
 
 ### Specifications
+
 For a more in-depth technical dive, read the [SPECIFICATIONS.md](./SPECIFICATIONS.md).
